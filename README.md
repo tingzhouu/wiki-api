@@ -30,7 +30,8 @@ Key **node app.js** in terminal
 
 Using **Postman** or any other method API testing, 
 
-**- For ALL Articles** localhost:3000/articles
+
+### For ALL Articles: localhost:3000/articles
 
 GET (nothing required in the body): Returns all articles in the database.
 
@@ -38,7 +39,8 @@ POST (title and content of article in the body): Creates article object and upda
 
 DELETE (nothing required in the body): Deletes all articles in the database.
 
-**- For Specific Articles** localhost:3000/articles/**articleName**
+
+### For Specific Articles: localhost:3000/articles/articleName
   
 GET (nothing required in the body): Returns the specific article.
 
