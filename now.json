@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "builds": [
+        { "src": "app.js",
+          "use": "@now/node-server",
+          "config": {"maxLambdaSize": "50mb"}
+        }
+    ],
+    "routes": [
+        { "src": "/(.*)", "dest": "app.js" }
+    ]
+}

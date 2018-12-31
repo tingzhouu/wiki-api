@@ -1,16 +1,44 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const ejs = require("ejs");
+const expressip = require("express-ip");
 
 const app = new express();
 
-app.set("view engine", "ejs");
-app.use(express.static("public"));
+
 app.use(bodyParser.urlencoded({ extended: true} ));
+app.use(expressip().getIpInfoMiddleware);
 
-mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true});
 
+mongoose.connect(`mongodb+srv://admin-tingzhou:${process.env.MONGO_PASSWORD}@cluster0-71gbh.mongodb.net/wikiDB?retryWrites=true`, {useNewUrlParser: true});
+// mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true}); - Used for testing on localhost
+
+
+// Creates a mongoose schema that stores all requests made to the API.
+const requestLogSchema = mongoose.Schema({
+  ipInfo: Object,
+  userAgent: String,
+  path: String,
+  method: String,
+  title: String,
+  content: String,
+});
+
+// Creates a mongoose model for requests in the database.
+const RequestLog = mongoose.model("RequestLog", requestLogSchema);
+
+// Function to log a request into the database.
+function logTheRequestToDB(req) {
+  let newRequestLog = new RequestLog({
+    ipInfo: req.ipInfo,
+    userAgent: req.headers["user-agent"],
+    path: req.route.path,
+    method: req.method,
+    title: req.body.title,
+    content: req.body.content,
+  });
+  newRequestLog.save();
+}
 
 //Creates mongoose schema with title and content of an article.
 const articleSchema = mongoose.Schema({
@@ -24,7 +52,7 @@ const articleSchema = mongoose.Schema({
   }
 });
 
-//Creates mongoose model in the database.
+//Creates mongoose model for articles in the database.
 const Article = mongoose.model("Article", articleSchema);
 
 
@@ -32,8 +60,10 @@ const Article = mongoose.model("Article", articleSchema);
 //There are 3 route handlers: get, post, delete.
 app.route("/articles")
 .get(function(req, res) { // no parameters are sent to the API. API returns all articles.
+  logTheRequestToDB(req); // logs request to database
   Article.find({}, function(err, allArticles) {
     if (!err) {
+      console.log("Request successful");
       res.send(allArticles);
     } else {
       res.send(err);
@@ -41,6 +71,7 @@ app.route("/articles")
   });
 })
 .post(function(req, res) { //title and content of article is sent to the API. API creates article object and updates database.
+  logTheRequestToDB(req); // logs request to database
   const newArticle = new Article({
     title: req.body.title,
     content: req.body.content
@@ -55,6 +86,7 @@ app.route("/articles")
 })
 .delete(function(req, res) { //no parameters are sent to the API. API deletes ALL article objects from the database.
   Article.deleteMany({}, function(err) {
+    logTheRequestToDB(req); // logs request to database
     if(!err) {
       res.send("All articles have been deleted");
     } else {
@@ -68,6 +100,7 @@ app.route("/articles")
 // There are 4 route handlers - get, put, patch, delete.
 app.route("/articles/:articleName")
 .get(function(req,res) { //name of article is sent to the API. API returns article object.
+  logTheRequestToDB(req); // logs request to database
   let inputArticleName = req.params.articleName;
   Article.findOne({title: inputArticleName}, function(err, foundArticle) {
     if (!err) {
@@ -78,6 +111,7 @@ app.route("/articles/:articleName")
   });
 })
 .put(function(req,res) { //name of article, new title AND new content of article is sent to the API. API updates article object.
+  logTheRequestToDB(req); // logs request to database
   let inputArticleName = req.params.articleName;
   Article.update(
     {title: inputArticleName},
@@ -94,6 +128,7 @@ app.route("/articles/:articleName")
 
 })
 .patch(function(req, res) { //name of article, new title OR new content of article is sent to the API. API only updates article object of fields sent.
+  logTheRequestToDB(req); // logs request to database
   let inputArticleName = req.params.articleName;
   Article.update(
     {title: inputArticleName},
@@ -108,6 +143,7 @@ app.route("/articles/:articleName")
   );
 })
 .delete(function(req, res) { //tile of article is sent to the API. API deletes article object from database.
+  logTheRequestToDB(req); // logs request to database
   let inputArticleName = req.params.articleName;
   Article.deleteOne({title: inputArticleName}, function(err) {
     if (!err) {
@@ -116,9 +152,4 @@ app.route("/articles/:articleName")
       res.send("Could not delete article");
     }
   });
-});
-
-
-app.listen(3000, function() {
-  console.log("Server started listening on port 3000");
 });
