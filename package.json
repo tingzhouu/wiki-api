@@ -11,8 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-ip": "^1.0.3",
     "mongoose": "^5.4.1"
   }
 }
