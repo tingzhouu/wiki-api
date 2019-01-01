@@ -9,6 +9,11 @@ const app = new express();
 app.use(bodyParser.urlencoded({ extended: true} ));
 app.use(expressip().getIpInfoMiddleware);
 
+app.use(function (req, res, next) {
+  logTheRequestToDB(req);
+  next();
+});
+
 
 mongoose.connect(`mongodb+srv://admin-tingzhou:${process.env.MONGO_PASSWORD}@cluster0-71gbh.mongodb.net/wikiDB?retryWrites=true`, {useNewUrlParser: true});
 // mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true}); //- Used for testing on localhost
@@ -35,12 +40,14 @@ function logTheRequestToDB(req) {
   let newRequestLog = new RequestLog({
     ipInfo: req.ipInfo,
     userAgent: req.headers["user-agent"],
-    path: req.route.path,
+    path: req.originalUrl,
     method: req.method,
     title: req.body.title,
     content: req.body.content,
+
   });
   newRequestLog.save();
+  console.log("log request first");
 }
 
 //Creates mongoose schema with title and content of an article.
@@ -63,11 +70,6 @@ const Article = mongoose.model("Article", articleSchema);
 //This is a chainable route handler for requests of all articles - /article.
 //There are 3 route handlers: get, post, delete.
 app.route("/articles")
-.all(function(req, res, next) {
-  console.log("log request first");
-  logTheRequestToDB(req); // logs request to database first
-  next();
-})
 .get(function(req, res, next) { // no parameters are sent to the API. API returns all articles.
 
   Article.find({}, function(err, allArticles) {
@@ -106,10 +108,6 @@ app.route("/articles")
 // This is a chainable route handler for requests of specific articles - article/<ArticleName>.
 // There are 4 route handlers - get, put, patch, delete.
 app.route("/articles/:articleName")
-.all(function(req, res, next) {
-  logTheRequestToDB(req); // logs request to database first
-  next();
-})
 .get(function(req, res, next) { //name of article is sent to the API. API returns article object.
   let inputArticleName = req.params.articleName;
   Article.findOne({title: inputArticleName}, function(err, foundArticle) {
@@ -134,7 +132,6 @@ app.route("/articles/:articleName")
       }
     }
   );
-
 })
 .patch(function(req, res, next) { //name of article, new title OR new content of article is sent to the API. API only updates article object of fields sent.
   let inputArticleName = req.params.articleName;
