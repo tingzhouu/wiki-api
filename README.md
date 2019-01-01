@@ -30,23 +30,23 @@ For API testing as it can send HTTP requests to the API.
 
 
 ## Getting Started (web version)
-### For ALL Articles: Link: (https://wiki-api-7xoubi3tf.now.sh/articles)
-GET request - Click on above link, or send a GET request, no content required in the body.
+### For ALL Articles: Link: (https://wiki-api-tingzhou.now.sh/articles)
+GET request: Click on above link, or send GET request, no content required in the body.
 
 
-POST request - Use Postman to send POST request with 'title' and 'content' as key in the body.
+POST request: Send POST request, with {title: String, content: String} in the body.
 
 
-DELETE request - No content required in the body.
+DELETE request - Send DELETE request, no content required in the body.
 
-### For Specific Articles: Link: (https://wiki-api-7xoubi3tf.now.sh/articles/ARTICLE_NAME)
-GET request - Click on above link, or send a GET request, no content required in the body.
+### For Specific Articles: Link: (https://wiki-api-tingzhou.now.sh/articles/ARTICLE_NAME)
+GET request: Click on above link, or send GET request, no content required in the body.
 
-PUT request - Use Postman to send PUT request with 'title' and 'content' as key in the body.
+PUT request: Send PUT request, with {title: String, content: String} in the body.
 
-PATCH request - Use Postman to send PATCH request with 'title' OR 'content' as key in the body.
+PATCH request: Send PATCH request with {title: String} OR {content: String} in the body.
 
-DELETE request - No content required in the body.
+DELETE request: Send DELETE request, no content required in the body.
 
 
 ## Getting Started (non-web version)
