@@ -1,4 +1,5 @@
-{
+{   
+    "alias": "wiki-api-tingzhou",
     "version": 2,
     "builds": [
         { "src": "app.js",
@@ -6,6 +7,9 @@
           "config": {"maxLambdaSize": "50mb"}
         }
     ],
+    "env": {
+      "MONGO_PASSWORD": "@mongo-db-password"
+    },
     "routes": [
         { "src": "/(.*)", "dest": "app.js" }
     ]

@@ -30,34 +30,34 @@ For API testing as it can send HTTP requests to the API.
 
 
 ## Getting Started (web version)
-### For ALL Articles: Link: (https://wiki-api-tingzhou.now.sh/articles)
+##### [For ALL Articles](https://wiki-api-tingzhou.now.sh/articles): 
 GET request: Click on above link, or send GET request, no content required in the body.
 
 
 POST request: Send POST request, with {title: String, content: String} in the body.
 
 
-DELETE request - Send DELETE request, no content required in the body.
-
-### For Specific Articles: Link: (https://wiki-api-tingzhou.now.sh/articles/ARTICLE_NAME)
-GET request: Click on above link, or send GET request, no content required in the body.
-
-PUT request: Send PUT request, with {title: String, content: String} in the body.
-
-PATCH request: Send PATCH request with {title: String} OR {content: String} in the body.
-
 DELETE request: Send DELETE request, no content required in the body.
+
+##### [For Specific Articles](https://wiki-api-tingzhou.now.sh/articles/ARTICLE_NAME):
+GET Request: Modify ARTICLE_NAME in above link, or send GET request, no content required in the body.
+
+PUT Request: Send PUT request, with ```{title: String, content: String}``` in the body.
+
+PATCH Request: Send PATCH request with ```{title: String}``` or ```{content: String}``` in the body.
+
+DELETE Request: Send DELETE request, no content required in the body.
 
 
 ## Getting Started (non-web version)
 Open terminal in the directory of folder
 
-Key **node app.js** in terminal
+Key ```node app.js``` in terminal
 
-Using **Postman** or any other method API testing,
+Using **Postman** or any other method of API testing,
 
 
-### For ALL Articles: localhost:3000/articles
+##### [For ALL Articles](localhost:3000/articles): 
 
 GET (nothing required in the body): Returns all articles in the database.
 
@@ -66,13 +66,13 @@ POST (title and content of article in the body): Creates article object and upda
 DELETE (nothing required in the body): Deletes all articles in the database.
 
 
-### For Specific Articles: localhost:3000/articles/articleName
+##### [For Specific Articles](localhost:3000/articles/ARTICLE_NAME): 
 
 GET (nothing required in the body): Returns the specific article.
 
-PUT (title AND content of article in the body): Modifies article object of both title and content, and updates database.
+PUT ```{title: String, content: String}```: Modifies article object of both title and content, and updates database.
 
-PATCH (title OR content of article in the body): Modifies article object of only title or content, and updates database.
+PATCH ```{title: String}``` or ```{ content: String}```: Modifies article object of either title or content, and updates database.
 
 DELETE (nothing required in the body): Deletes specific article in the database.
 
